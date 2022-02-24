@@ -19,7 +19,6 @@ jobs:
           sleep 30
           docker run --device /dev/net/tun --name 'Contingency' --cap-add NET_ADMIN -i -v $HOME/.easyconn:/root/.easyconn -p 127.0.0.1:2080:1080 -e EC_VER=7.6.7 hagb/docker-easyconnect:cli < setting.conf &
           sleep 30
-
       - uses: actions/checkout@v2
       - name: Set up Python environment
         uses: actions/setup-python@v2
@@ -30,7 +29,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
       - name: Check VPN connections status
         shell: bash
         run: |
@@ -39,7 +37,6 @@ jobs:
           docker container logs EasyConnect
           echo -e "\n=== Contingency ===\n"
           docker container logs Contingency
-
       - name: Run daily report script
         shell: bash
         env:
@@ -48,4 +45,4 @@ jobs:
           GRADUATING: ${{ secrets.graduating }}
           API_KEY: ${{ secrets.api_key }}
         run: |
-          python report.py "$USERNAME" "$PASSWORD" -g="$GRADUATING" -k="$API_KEY" -p
+          python report.py "$USERNAME" "$PASSWORD" -k="$API_KEY" -p
